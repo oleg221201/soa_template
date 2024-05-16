@@ -1,19 +1,9 @@
-import Fastify from 'fastify';
+import { init as initServer, teardown as teardownServer } from './server/main.js';
 
 export const start = async () => {
-  const fastify = Fastify({
-    logger: true,
-  });
+  const server = await initServer();
 
-  fastify.get('/', async function handler(request, reply) {
-    return { hello: 'world' };
-  });
-
-  await fastify.listen({ port: 3000 });
-
-  const teardownServer = async () => {
-    console.log('Teardown server process...');
-  };
+  await server.listen({ host: '0.0.0.0', port: 3000 });
 
   return {
     teardown: async () => {
